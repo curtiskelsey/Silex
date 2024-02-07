@@ -1,0 +1,11 @@
+includes:
+  - phpstan-baseline.php
+parameters:
+  level: 9
+  reportUnmatchedIgnoredErrors: false
+  parallel:
+    processTimeout: 600.0
+    maximumNumberOfProcesses: 2
+  paths:
+    - src
+    - tests

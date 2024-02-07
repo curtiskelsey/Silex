@@ -15,12 +15,12 @@ use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Silex\CallbackResolver;
 
-class CallbackResolverTest extends Testcase
+class CallbackResolverTest extends TestCase
 {
     private $app;
     private $resolver;
 
-    public function setup()
+    public function setUp() : void
     {
         $this->app = new Container();
         $this->resolver = new CallbackResolver($this->app);
@@ -69,6 +69,7 @@ class CallbackResolverTest extends Testcase
     {
         $this->app['non_callable_obj'] = function () { return new \stdClass(); };
         $this->app['non_callable'] = function () { return []; };
+        $this->expectException(\InvalidArgumentException::class);
         $this->resolver->convertCallback($name);
     }
 

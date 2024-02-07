@@ -13,6 +13,7 @@ namespace Silex\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Silex\Controller;
+use Silex\Exception\ControllerFrozenException;
 use Silex\Route;
 
 /**
@@ -39,6 +40,7 @@ class ControllerTest extends TestCase
         $controller = new Controller(new Route('/foo'));
         $controller->bind('foo');
         $controller->freeze();
+        $this->expectException(ControllerFrozenException::class);
         $controller->bind('bar');
     }
 
@@ -118,6 +120,7 @@ class ControllerTest extends TestCase
         $route = new MyRoute();
 
         $controller = new Controller($route);
+        $this->expectException(\BadMethodCallException::class);
         $controller->bar();
     }
 }

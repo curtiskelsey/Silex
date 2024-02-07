@@ -20,6 +20,7 @@ use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\FormTypeGuesserChain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -100,6 +101,7 @@ class FormServiceProviderTest extends TestCase
             return $extensions;
         });
 
+        $this->expectException(InvalidArgumentException::class);
         $app['form.factory']
             ->createBuilder('Symfony\Component\Form\Extension\Core\Type\FormType', [])
             ->add('dummy', 'dummy')
@@ -164,6 +166,7 @@ class FormServiceProviderTest extends TestCase
             return $extensions;
         });
 
+        $this->expectException(InvalidArgumentException::class);
         $app['form.factory']
             ->createBuilder('Symfony\Component\Form\Extension\Core\Type\FormType', [])
             ->add('dummy', 'dummy.form.type')
@@ -219,6 +222,7 @@ class FormServiceProviderTest extends TestCase
             return $extensions;
         });
 
+        $this->expectException(InvalidArgumentException::class);
         $factory = $app['form.factory'];
     }
 
@@ -251,10 +255,10 @@ class FormServiceProviderTest extends TestCase
         $this->assertFalse($form->isValid());
         $r = new \ReflectionMethod($form, 'getErrors');
         if (!$r->getNumberOfParameters()) {
-            $this->assertContains('ERROR: German translation', $form->getErrorsAsString());
+            $this->assertStringContainsString('ERROR: German translation', $form->getErrorsAsString());
         } else {
             // as of 2.5
-            $this->assertContains('ERROR: German translation', (string) $form->getErrors(true, false));
+            $this->assertStringContainsString('ERROR: German translation', (string) $form->getErrors(true, false));
         }
     }
 

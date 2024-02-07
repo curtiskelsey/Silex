@@ -31,13 +31,13 @@ class MonologServiceProviderTest extends TestCase
 {
     private $currErrorHandler;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->currErrorHandler = set_error_handler('var_dump');
         restore_error_handler();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         set_error_handler($this->currErrorHandler);
     }
@@ -60,9 +60,9 @@ class MonologServiceProviderTest extends TestCase
 
         $records = $app['monolog.handler']->getRecords();
         if (Kernel::VERSION_ID < 30100) {
-            $this->assertContains('Matched route "GET_foo"', $records[0]['message']);
+            $this->assertStringContainsString('Matched route "GET_foo"', $records[0]['message']);
         } else {
-            $this->assertContains('Matched route "{route}".', $records[0]['message']);
+            $this->assertStringContainsString('Matched route "{route}".', $records[0]['message']);
             $this->assertSame('GET_foo', $records[0]['context']['route']);
         }
     }
@@ -188,6 +188,7 @@ class MonologServiceProviderTest extends TestCase
         $app = $this->getApplication();
         $app['monolog.level'] = 'foo';
 
+        $this->expectException(\InvalidArgumentException::class);
         $app['monolog.handler']->getLevel();
     }
 

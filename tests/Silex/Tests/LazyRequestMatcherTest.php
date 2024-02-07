@@ -53,6 +53,7 @@ class LazyRequestMatcherTest extends TestCase
         });
 
         $request = Request::create('path');
+        $this->expectException(\LogicException::class);
         $matcher->matchRequest($request);
     }
 
