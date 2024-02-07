@@ -13,6 +13,7 @@ namespace Silex;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -39,7 +40,7 @@ use Silex\Provider\HttpKernelServiceProvider;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Application extends Container implements HttpKernelInterface, TerminableInterface
+class Application extends Container implements HttpKernelInterface, TerminableInterface, ContainerInterface
 {
     const VERSION = '2.2.3';
 
@@ -502,5 +503,10 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
     public function terminate(Request $request, Response $response)
     {
         $this['kernel']->terminate($request, $response);
+    }
+
+    public function has(string $id) : bool
+    {
+        return isset($this[$id]);
     }
 }
