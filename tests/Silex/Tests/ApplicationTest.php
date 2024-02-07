@@ -14,6 +14,7 @@ namespace Silex\Tests;
 use Fig\Link\GenericLinkProvider;
 use Fig\Link\Link;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\Api\ControllerProviderInterface;
@@ -422,6 +423,7 @@ class ApplicationTest extends TestCase
         })
         ->before($middleware);
 
+        $this->expectException(RuntimeException::class);
         $app->handle(Request::create('/'), HttpKernelInterface::MASTER_REQUEST, false);
     }
 
@@ -441,6 +443,7 @@ class ApplicationTest extends TestCase
         })
         ->after($middleware);
 
+        $this->expectException(RuntimeException::class);
         $app->handle(Request::create('/'), HttpKernelInterface::MASTER_REQUEST, false);
     }
 
@@ -495,6 +498,8 @@ class ApplicationTest extends TestCase
     public function testMountNullException()
     {
         $app = new Application();
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The "mount" method takes either a "ControllerCollection" instance, "ControllerProviderInterface" instance, or a callable.');
         $app->mount('/exception', null);
     }
 
@@ -505,6 +510,8 @@ class ApplicationTest extends TestCase
     public function testMountWrongConnectReturnValueException()
     {
         $app = new Application();
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The method "Silex\Tests\IncorrectControllerCollection::connect" must return a "ControllerCollection" instance. Got: "NULL"');
         $app->mount('/exception', new IncorrectControllerCollection());
     }
 
@@ -538,6 +545,8 @@ class ApplicationTest extends TestCase
         $app = new Application();
         unset($app['exception_handler']);
         $app->match('/')->bind('homepage');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The "homepage" route must have code to run when it matches.');
         $app->handle(Request::create('/'));
     }
 

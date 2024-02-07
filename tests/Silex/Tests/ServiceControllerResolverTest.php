@@ -28,7 +28,7 @@ class ServiceControllerResolverTest extends Testcase
     private $mockResolver;
     private $resolver;
 
-    public function setup()
+    public function setUp() : void
     {
         $this->mockResolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')
             ->disableOriginalConstructor()
